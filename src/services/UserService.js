@@ -37,7 +37,7 @@ const createUser = (newUser) => {
 
 const loginUser = (userLogin) => {
     return new Promise(async (resolve, reject) => {
-        const {  name, email, password, isAdmin  } = userLogin
+        const {  email, password  } = userLogin
         
         try {
             const checkUser = await User.findOne({
@@ -50,11 +50,7 @@ const loginUser = (userLogin) => {
                 })
             }
 
-            console.log(password);
-            console.log(checkUser.password);
-
             const comparePassword = bcrypt.compareSync(password, checkUser.password);
-            // console.log(comparePassword);
 
             if (password !== checkUser.password && !comparePassword) {
                 resolve({
@@ -132,10 +128,48 @@ const deleteUser = (id) => {
         }
     })
 }
+const getAllUser = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const allUser= await User.find()
+            resolve({
+                status: 'OK',
+                message: 'success',
+                data: allUser
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 
+const getDetailsUser = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const checkUser = await User.findOne({
+                _id: id
+            })
+            if (checkUser === null) {
+                resolve({
+                    status: 'ERR',
+                    message: 'The user is not defined'
+                })
+            }
+            resolve({
+                status: 'OK',
+                message: 'success',
+                data: checkUser
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 module.exports= {
     createUser,
     loginUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getAllUser,
+    getDetailsUser,
 }

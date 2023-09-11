@@ -48,8 +48,14 @@ const loginUser = async (req, res) => {
             })
         }
         const response = await UserService.loginUser(req.body)
-        
-        return res.status(200).json(response)
+        const { refresh_token, ...newResponse }= response;
+        // console.log(refresh_token)
+        res.cookie('refresh_token', refresh_token,{
+            httpOnly: true,
+            secure: false,
+            samesite: 'strict'
+        })
+        return res.status(200).json(newResponse)
     } catch (e) {
         return res.status(404).json({
             message: e
@@ -142,8 +148,9 @@ const getDetailsUser = async (req, res) => {
 }
 
 const refreshToken = async (req, res) => {
+    console.log("xem ",req.cookies.refresh_token)
     try {
-        let token = req.headers.token.split(' ')[1]
+        let token = req.cookies.refresh_token
         if (!token) {
             return res.status(200).json({
                 status: 'ERR',
@@ -165,5 +172,8 @@ module.exports= {
     loginUser,
     updateUser,
     deleteUser,
+    getAllUser,
+    getDetailsUser,
+    refreshToken,
 }
 
