@@ -1,28 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { store } from './redux/store';
-import { Provider } from 'react-redux';
-import {QueryClientProvider, QueryClient} from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+const express = require("express");
+const dotenv = require('dotenv');
+const mongoose = require("mongoose");
+const routes = require('./routes')
+const cors = require('cors');
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-const queryClient= new QueryClient()
+dotenv.config()
 
-root.render(
-  // <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  // </React.StrictMode>
-);
+const app = express()
+const port = process.env.PORT || 3001
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+app.use(cors())
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb' }));
+app.use(bodyParser.json())
+app.use(cookieParser())
+
+routes(app);
+
+mongoose.connect(`${process.env.MONGO_DB}`)
+    .then(() => {
+        console.log('Connect Db success!')
+    })
+    .catch((err) => {
+        // console.log(err)
+    })
+app.listen(port, () => {
+    // console.log('Server is running in port: ', + port)
+})
