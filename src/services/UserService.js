@@ -4,7 +4,7 @@ const { genneralAccessToken, genneralRefreshToken } = require("./JwtService")
 
 const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
-        const { name, email, password, isAdmin } = newUser
+        const { name, email, password } = newUser
         try {
             const checkUser = await User.findOne({
                 email: email
@@ -19,8 +19,7 @@ const createUser = (newUser) => {
             const createdUser = await User.create({
                 name,
                 email,
-                password: hash,
-                isAdmin
+                password: hash
             })
             if (createdUser) {
                 resolve({
@@ -84,6 +83,29 @@ const loginUser = (userLogin) => {
     })
 }
 
+const getDetailsUser = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = await User.findOne({
+                _id: id
+            })
+            if (user === null) {
+                resolve({
+                    status: 'ERR',
+                    message: 'The user is not defined'
+                })
+            }
+            resolve({
+                status: 'OK',
+                message: 'SUCESS',
+                data: user
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 const updateUser = (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -137,5 +159,6 @@ module.exports= {
     createUser,
     loginUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getDetailsUser,
 }
