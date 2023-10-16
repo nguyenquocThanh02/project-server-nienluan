@@ -2,7 +2,8 @@ const Order = require("../models/OrderProduct")
 const Product = require("../models/ProductModel")
 
 const createOrder = (newOrder) => {
-    console.log(newOrder)
+    // console.log(newOrder)
+    
     return new Promise(async (resolve, reject) => {
         const { orderItems, itemsPrice, shippingPrice, totalPrice, fullName, address, phone,user } = newOrder
         try {
@@ -174,25 +175,27 @@ const cancelOrderDetails = (id, data) => {
     })
 }
 
-// const getAllOrder = () => {
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             const allOrder = await Order.find().sort({createdAt: -1, updatedAt: -1})
-//             resolve({
-//                 status: 'OK',
-//                 message: 'Success',
-//                 data: allOrder
-//             })
-//         } catch (e) {
-//             reject(e)
-//         }
-//     })
-// }
+const getAllOrder = () => {
+    return new Promise(async (resolve, reject) => {
+        // console.log('okk');
+        try {
+            const allOrder = await Order.find().sort({createdAt: -1, updatedAt: -1})
+            // console.log(allOrder)
+            resolve({
+                status: 'OK',
+                message: 'Success',
+                data: allOrder
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 
 module.exports = {
     createOrder,
     getAllOrderDetails,
     getOrderDetails,
-    // cancelOrderDetails,
-    // getAllOrder
+    cancelOrderDetails,
+    getAllOrder
 }
