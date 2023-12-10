@@ -1,5 +1,5 @@
 const UserService = require('../services/UserService')
-const JwtService = require('../services/JwtService')
+// const JwtService = require('../services/JwtService')
 
 const createUser = async (req, res) => {
     try {
@@ -93,24 +93,6 @@ const deleteUser = async (req, res) => {
     }
 }
 
-const deleteMany = async (req, res) => {
-    try {
-        const ids = req.body.ids
-        if (!ids) {
-            return res.status(200).json({
-                status: 'ERR',
-                message: 'The ids is required'
-            })
-        }
-        const response = await UserService.deleteManyUser(ids)
-        return res.status(200).json(response)
-    } catch (e) {
-        return res.status(404).json({
-            message: e
-        })
-    }
-}
-
 
 const getAllUser = async (req, res) => {
     try {
@@ -141,23 +123,6 @@ const getDetailsUser = async (req, res) => {
     }
 }
 
-const refreshToken = async (req, res) => {
-    try {
-        let token = req.headers.token.split(' ')[1]
-        if (!token) {
-            return res.status(200).json({
-                status: 'ERR',
-                message: 'The token is required'
-            })
-        }
-        const response = await JwtService.refreshTokenJwtService(token)
-        return res.status(200).json(response)
-    } catch (e) {
-        return res.status(404).json({
-            message: e
-        })
-    }
-}
 
 const logoutUser = async (req, res) => {
     try {

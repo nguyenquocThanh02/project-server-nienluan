@@ -4,6 +4,7 @@ const OrderController = require('../controllers/OrderController');
 const { authUserMiddleWare, authMiddleWare } = require("../middlewares/authMiddleWare");
 
 router.post('/create-order', OrderController.createOrder)
+router.put('/update-deliver/:id/:state', OrderController.updateOrder)
 router.get('/get-all-ordered-of-user/:id', OrderController.getAllOrderDetails)
 // router.get('/get-details-order/:id', OrderController.getDetailsOrder)
 router.delete('/cancel-order/:id', OrderController.cancelOrderDetails)

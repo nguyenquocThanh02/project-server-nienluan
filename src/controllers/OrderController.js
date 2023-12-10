@@ -18,7 +18,24 @@ const createOrder = async (req, res) => {
         })
     }
 }
-
+const updateOrder = async (req, res) => {
+    try {
+        const orderId = req.params.id
+        const data = req.params.state
+        if (!orderId) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The productId is required'
+            })
+        }
+        const response = await OrderService.updateOrder(orderId, data)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
 const getAllOrderDetails = async (req, res) => {
     try {
         const userId = req.params.id
@@ -92,6 +109,7 @@ const getAllOrder = async (req, res) => {
 
 module.exports = {
     createOrder,
+    updateOrder,
     getAllOrderDetails,
     getDetailsOrder,
     cancelOrderDetails,

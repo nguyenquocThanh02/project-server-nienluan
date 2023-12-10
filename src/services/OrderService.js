@@ -2,7 +2,6 @@ const Order = require("../models/OrderProduct")
 const Product = require("../models/ProductModel")
 
 const createOrder = (newOrder) => {
-    // console.log(newOrder)
     
     return new Promise(async (resolve, reject) => {
         const { orderItems, itemsPrice, shippingPrice, totalPrice, fullName, address, phone,user } = newOrder
@@ -56,7 +55,6 @@ const createOrder = (newOrder) => {
                     shippingPrice,
                     totalPrice,
                     user: user
-                    // isPaid, paidAt
                 })
                 if (createdOrder) {
                     resolve({
@@ -71,7 +69,31 @@ const createOrder = (newOrder) => {
     })
 }
 
+const updateOrder = (id, data) => {
+    return new Promise(async (resolve, reject) => {
+        
+        try {
+            const checkOrder = await Order.findOne({
+                _id: id
+            })
+            if (checkOrder === null) {
+                resolve({
+                    status: 'ERR',
+                    message: 'The product is not defined'
+                })
+            }
 
+            const updatedOrder = await Order.findByIdAndUpdate(id, { isDelivered: data }, { new: true });
+            resolve({
+                status: 'OK',
+                message: 'SUCCESS',
+                data: updatedOrder
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 
 const getAllOrderDetails = (id) => {
     return new Promise(async (resolve, reject) => {
@@ -194,6 +216,7 @@ const getAllOrder = () => {
 
 module.exports = {
     createOrder,
+    updateOrder,
     getAllOrderDetails,
     getOrderDetails,
     cancelOrderDetails,

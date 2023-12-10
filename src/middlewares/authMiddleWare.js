@@ -2,13 +2,14 @@ const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 dotenv.config()
 
+// Kiểm tra quyền admin bằng xác thực tooken
 const authMiddleWare = (req, res, next) => {
-    const token = req.headers.token.split(' ')[1]
-    console.log(token)
 
+    // Nhận tooken của header từ request
+    const token = req.headers.token.split(' ')[1]
+
+    // Kiểm tra quyền admin
     jwt.verify(token, process.env.ACCESS_TOKEN, function (err, user) {
-        console.log(err);
-        console.log(user);
         if (err) {
             return res.status(404).json({
                 message: 'The authemtication',
@@ -26,6 +27,7 @@ const authMiddleWare = (req, res, next) => {
     });
 }
 
+// Xác thực user
 const authUserMiddleWare = (req, res, next) => {
     const token = req.headers.token.split(' ')[1]
     const userId = req.params.id

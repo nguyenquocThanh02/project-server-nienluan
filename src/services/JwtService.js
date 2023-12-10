@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv');
 dotenv.config()
 
+// Tạo tooken với thời gian sống là 1h
 const genneralAccessToken = async (payload) => {
     const access_token = jwt.sign({
         ...payload
@@ -10,6 +11,7 @@ const genneralAccessToken = async (payload) => {
     return access_token
 }
 
+// Tạo 1 refresh tooken với thời gian sống là 1y
 const genneralRefreshToken = async (payload) => {
     const refresh_token = jwt.sign({
         ...payload
@@ -18,6 +20,7 @@ const genneralRefreshToken = async (payload) => {
     return refresh_token
 }
 
+// Xác thực lại refresh tooken
 const refreshTokenJwtService = (token) => {
     return new Promise((resolve, reject) => {
         try {
